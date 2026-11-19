@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <title>悬赏令</title>
+    <link rel="stylesheet" href="board.css" />
+  </head>
+  <body>
+    <main class="app">
+      <header class="masthead">
+        <h1 class="wordmark">悬赏令</h1>
+        <p class="stats" id="stats"></p>
+        <p class="sub" id="subtitle"></p>
+      </header>
+
+      <section class="filters">
+        <label class="ctl">
+          <span class="label">金额 ≥</span>
+          <input id="minMoney" type="number" min="0" step="10" placeholder="不限" />
+          <span class="unit">元</span>
+        </label>
+        <label class="ctl">
+          <span class="label">耗时 ≤</span>
+          <input id="maxMinutes" type="number" min="0" step="5" placeholder="不限" />
+          <span class="unit">分钟</span>
+        </label>
+        <label class="ctl">
+          <span class="label">范围</span>
+          <input id="days" type="number" min="1" max="60" value="7" />
+          <span class="unit">天</span>
+        </label>
+        <label class="ctl">
+          <span class="label">排序</span>
+          <select id="sort">
+            <option value="priority">星级</option>
+            <option value="hourly">时薪</option>
+            <option value="money">金额</option>
+            <option value="minutes">耗时</option>
+          </select>
+        </label>
+        <button id="rescan" class="btn solid">重新抓取</button>
+      </section>
+
+      <p class="note" id="note"></p>
+
+      <section id="list" class="list"></section>
+
+      <footer class="foot">
+        <button id="diag" class="btn text">诊断</button>
+        <button id="copy" class="btn text">复制调试</button>
+        <button id="reload" class="btn text">重载扩展</button>
+        <details class="debug">
+          <summary>调试信息</summary>
+          <pre id="debug"></pre>
+        </details>
+      </footer>
+    </main>
+    <script src="board.js"></script>
+  </body>
+</html>

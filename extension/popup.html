@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      :root { color-scheme: dark; }
+      body {
+        margin: 0;
+        width: 260px;
+        padding: 14px;
+        background: #191512;
+        color: #f1e7d6;
+        font: 13px/1.5 "Segoe UI", "Microsoft YaHei", sans-serif;
+      }
+      h1 { font-size: 15px; margin: 0 0 2px; letter-spacing: 2px; }
+      p.hint { margin: 0 0 12px; color: #9c8f7c; font-size: 11px; }
+      button {
+        display: block;
+        width: 100%;
+        margin-bottom: 8px;
+        padding: 8px 10px;
+        border-radius: 6px;
+        border: 1px solid #4a3d30;
+        background: #241d17;
+        color: #f1e7d6;
+        font-size: 13px;
+        cursor: pointer;
+      }
+      button.primary { background: #b4342a; border-color: #b4342a; font-weight: 600; }
+      button:hover { filter: brightness(1.12); }
+      #status { margin-top: 6px; font-size: 11px; color: #9c8f7c; min-height: 28px; white-space: pre-wrap; }
+    </style>
+  </head>
+  <body>
+    <h1>悬赏令</h1>
+    <p class="hint">先在 Outlook 里打开收件箱，再点抓取。</p>
+    <button id="scan" class="primary">抓取当前 Outlook</button>
+    <button id="board">打开悬赏令</button>
+    <div id="status"></div>
+    <script src="popup.js"></script>
+  </body>
+</html>

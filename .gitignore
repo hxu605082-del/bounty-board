@@ -1,0 +1,6 @@
+dist/
+node_modules/
+.chrome-debug-profile/
+*.log
+.DS_Store
+Thumbs.db
