@@ -1,63 +1,79 @@
-# 悬赏令 · Outlook 有偿招募清单
+# Bounty Board
 
-从学校/公司的 Outlook 网页里，把「给钱、给券」的研究招募邮件挑出来，按 **时薪 × 形式** 打 1–5 星，
-渲染成一张费率清单。点一条就能直接跳到那封原始邮件。
+A browser extension that turns a university Outlook inbox into a ranked list of paid research studies — sorted by how much they actually pay per hour.
 
-![界面](docs/shots/board-desktop.png)
+![The board](docs/shots/board-desktop.png)
 
-## 它解决什么
+## Why
 
-学校邮箱里混着大量「参与研究得 HKD100」「填问卷送礼品卡」「赢 iPad」的邮件。
-一条条翻很费劲，而且真正的问题是：**这活儿值不值得花那 45 分钟**。
+A student inbox is full of "join our study for HKD 100", "fill this survey for a gift card", "win an iPad".
+Reading them one by one is slow, and the real question is never "is there a reward?" — it's **"is this worth 45 minutes of my afternoon?"**
 
-所以清单把「时薪」当主数字：金额 ÷ 耗时，高的在上；算不出时薪的（代金券、抽奖、只说“报酬丰厚”）
-单独分区，不冒充收入。
+So the board leads with an hourly rate: money ÷ time. Anything that can't be priced honestly — vouchers, lotteries, "generous compensation" — gets its own group instead of pretending to be income.
 
-## 安装（Chromium 内核，Chrome / Edge）
+## Install
 
-1. 打开 `chrome://extensions`，开启「开发者模式」
-2. 「加载已解压的扩展程序」→ 选本仓库的 `extension/` 目录
-3. 在浏览器里登录 Outlook 网页版，进收件箱
-4. 打开 `chrome-extension://<扩展ID>/board.html` → 点「重新抓取」
+Chromium browsers only (Chrome, Edge).
 
-## 它怎么工作
+1. Open `chrome://extensions` and turn on **Developer mode**
+2. **Load unpacked** → pick the `extension/` folder in this repo
+3. Sign in to Outlook on the web and open your inbox
+4. Visit `chrome-extension://<extension-id>/board.html` and hit **Rescan**
 
-- **采集**：读列表行的可见文字（`[role="listbox"] [role="group"]`），不读正文
-- **翻页**：这一版 Outlook 是虚拟列表，`scrollTop` 和合成事件都无效，
-  所以用 `chrome.debugger` 发**可信滚轮**逐屏推进（扫描时 Chrome 顶部会出现调试提示，属正常）
-- **解析**：正则抽金额与耗时；`parser.js` 是纯函数，配 29 项测试
-- **跳转**：行 id 在祖先元素的 `data-convid` 上，深链 `…/mail/inbox/id/<id>` 可直接打开；
-  找不到时退回“滚到那一行再点”
-- **补全**：打开某封邮件后，从正文补回缺失的耗时/金额并写回数据
+## How it works
 
-## 已知限制
+- **Collection** reads the visible text of each mail row (`[role="listbox"] [role="group"]`). Subjects, senders, previews, timestamps.
+- **Paging** is the hard part: this Outlook build renders a virtualized list where `scrollTop` does nothing and synthetic `WheelEvent`s are ignored. The extension attaches `chrome.debugger` and sends real wheel input, a screen at a time. Chrome shows its debugging banner while this runs, and the extension detaches when done.
+- **Parsing** pulls money and duration out of the row text with a small set of regexes in `parser.js` — a pure module with 28 regression tests.
+- **Opening** uses the row's `data-convid` to build `…/mail/inbox/id/<id>`, which loads that exact message. When a row has no id, the extension scrolls until it finds the row and clicks it instead.
 
-- 只支持这一版 Outlook 网页（`outlook.cloud.microsoft`）。改版后选择器可能失效，
-  排障笔记见 [docs/owa-dom.md](docs/owa-dom.md)
-- 需要 `chrome.debugger` 权限；扫描期间浏览器顶部会有调试提示
-- 未打包扩展改动后**必须重载**（`chrome://extensions` 里点 ⟳）。Chrome 不会自动重读磁盘
-- 列表按「重点/其他」分组时，只会看到当前分组
+## Limits
 
-## 开发
+- Built against one Outlook build (`outlook.cloud.microsoft`). If Microsoft ships a new DOM, selectors break — see [docs/owa-dom.md](docs/owa-dom.md) for what was measured and how to re-derive it.
+- Requires the `chrome.debugger` permission. That makes it effectively unpublishable on the Chrome Web Store; load it unpacked or ship it yourself.
+- Unpacked extensions don't reload themselves. After changing code you must click ⟳ on `chrome://extensions`.
+- Only the current mail group (Focused / Other) is visible at a time.
+
+## Development
 
 ```
-node tools/build.mjs        # src/ → extension/content.js（合并产物）+ dist/firefox
-node test/parser.test.mjs   # 29 项解析测试
+node tools/build.mjs        # src/ → extension/content.js (+ dist/firefox)
+node test/parser.test.mjs   # 28 parsing tests
 ```
 
-**不要直接改 `extension/content.js`**，它是 `src/parser.js` + `src/content.core.js` 的合并产物。
+`extension/content.js` is generated — edit `src/parser.js` or `src/content.core.js` instead.
 
-## 目录
+## Layout
 
 ```
-extension/      可加载的扩展（含构建产物 content.js）
-src/            源码：parser.js（纯函数）、content.core.js（DOM 采集）
-tools/build.mjs 构建
-test/           解析回归测试
-docs/           Outlook DOM 实测笔记 + 截图
-skills/         DSH 技能封装（可选）
+extension/      loadable extension (content.js is built)
+src/            parser.js (pure functions) + content.core.js (DOM collection)
+tools/build.mjs
+test/
+docs/           measured Outlook DOM notes, screenshots
+skills/         DSH skill wrapper (optional)
 ```
 
-## 许可
+## License
 
 MIT
+
+---
+
+## 中文说明
+
+把学校 Outlook 网页里的「给钱、给券」招募邮件抓出来，按 **时薪** 排成一张清单：金额 ÷ 耗时，高的在上。
+算不出时薪的（代金券、抽奖、只说“报酬丰厚”）单独分组，不冒充收入。
+
+**安装**：`chrome://extensions` → 开发者模式 → 加载已解压的扩展程序 → 选 `extension/` → 登录 Outlook 后打开
+`chrome-extension://<扩展ID>/board.html` → 点「重新抓取」。
+
+**两个必须知道的点**
+
+1. 这一版 Outlook 是虚拟列表，`scrollTop` 和合成滚轮事件都无效，所以用 `chrome.debugger` 发真实滚轮翻页——扫描时浏览器顶部会出现调试提示，扫完自动断开。
+2. 未打包扩展改动后必须手动重载（`chrome://extensions` 里点 ⟳），Chrome 不会自动重读磁盘。
+
+**已知限制**：只针对 `outlook.cloud.microsoft` 这一版页面；改版后选择器会失效，排障笔记在 [docs/owa-dom.md](docs/owa-dom.md)；
+`chrome.debugger` 权限导致它基本无法上架 Chrome 应用商店，只适合自己加载使用。
+
+**开发**：`node tools/build.mjs` 构建，`node test/parser.test.mjs` 跑测试。别直接改 `extension/content.js`。
