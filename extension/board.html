@@ -1,44 +1,51 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>悬赏令</title>
+    <title>Bounty Board</title>
     <link rel="stylesheet" href="board.css" />
   </head>
   <body>
     <main class="app">
       <header class="masthead">
-        <h1 class="wordmark">悬赏令</h1>
+        <h1 class="wordmark" id="wordmark">Bounty Board</h1>
         <p class="stats" id="stats"></p>
         <p class="sub" id="subtitle"></p>
       </header>
 
       <section class="filters">
         <label class="ctl">
-          <span class="label">金额 ≥</span>
-          <input id="minMoney" type="number" min="0" step="10" placeholder="不限" />
-          <span class="unit">元</span>
+          <span class="label" data-i18n="filter.minMoney">Min pay</span>
+          <input id="minMoney" type="number" min="0" step="10" data-i18n-ph="ph.any" placeholder="any" />
+          <span class="unit" data-i18n="filter.unitMoney">¥</span>
         </label>
         <label class="ctl">
-          <span class="label">耗时 ≤</span>
-          <input id="maxMinutes" type="number" min="0" step="5" placeholder="不限" />
-          <span class="unit">分钟</span>
+          <span class="label" data-i18n="filter.maxMinutes">Max time</span>
+          <input id="maxMinutes" type="number" min="0" step="5" data-i18n-ph="ph.any" placeholder="any" />
+          <span class="unit" data-i18n="filter.unitMinutes">min</span>
         </label>
         <label class="ctl">
-          <span class="label">范围</span>
+          <span class="label" data-i18n="filter.days">Window</span>
           <input id="days" type="number" min="1" max="60" value="7" />
-          <span class="unit">天</span>
+          <span class="unit" data-i18n="filter.unitDays">days</span>
         </label>
         <label class="ctl">
-          <span class="label">排序</span>
+          <span class="label" data-i18n="filter.sort">Sort</span>
           <select id="sort">
-            <option value="priority">星级</option>
-            <option value="hourly">时薪</option>
-            <option value="money">金额</option>
-            <option value="minutes">耗时</option>
+            <option value="priority" data-i18n="sort.priority">Stars</option>
+            <option value="hourly" data-i18n="sort.hourly">Rate</option>
+            <option value="money" data-i18n="sort.money">Pay</option>
+            <option value="minutes" data-i18n="sort.minutes">Time</option>
           </select>
         </label>
-        <button id="rescan" class="btn solid">重新抓取</button>
+        <label class="ctl">
+          <span class="label" data-i18n="lang.label">Lang</span>
+          <select id="lang">
+            <option value="en">EN</option>
+            <option value="zh">中文</option>
+          </select>
+        </label>
+        <button id="rescan" class="btn solid" data-i18n="action.rescan">Rescan</button>
       </section>
 
       <p class="note" id="note"></p>
@@ -46,11 +53,11 @@
       <section id="list" class="list"></section>
 
       <footer class="foot">
-        <button id="diag" class="btn text">诊断</button>
-        <button id="copy" class="btn text">复制调试</button>
-        <button id="reload" class="btn text">重载扩展</button>
+        <button id="diag" class="btn text" data-i18n="action.diag">Diagnose</button>
+        <button id="copy" class="btn text" data-i18n="action.copy">Copy debug</button>
+        <button id="reload" class="btn text" data-i18n="action.reload">Reload extension</button>
         <details class="debug">
-          <summary>调试信息</summary>
+          <summary data-i18n="debug.summary">Debug info</summary>
           <pre id="debug"></pre>
         </details>
       </footer>

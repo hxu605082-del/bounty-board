@@ -2,7 +2,9 @@
 
 A browser extension that turns a university Outlook inbox into a ranked list of paid research studies — sorted by how much they actually pay per hour.
 
-![The board](docs/shots/board-desktop.png)
+![The board](docs/shots/board-en-desktop.png)
+
+The interface ships in English and Chinese; the toggle in the toolbar switches language and the choice is remembered. ([中文界面](docs/shots/board-zh-desktop.png))
 
 ## Why
 
@@ -26,6 +28,7 @@ Chromium browsers only (Chrome, Edge).
 - **Paging** is the hard part: this Outlook build renders a virtualized list where `scrollTop` does nothing and synthetic `WheelEvent`s are ignored. The extension attaches `chrome.debugger` and sends real wheel input, a screen at a time. Chrome shows its debugging banner while this runs, and the extension detaches when done.
 - **Parsing** pulls money and duration out of the row text with a small set of regexes in `parser.js` — a pure module with 28 regression tests.
 - **Opening** uses the row's `data-convid` to build `…/mail/inbox/id/<id>`, which loads that exact message. When a row has no id, the extension scrolls until it finds the row and clicks it instead.
+- **Language** is a two-entry dictionary in `board.js` (`I18N.en` / `I18N.zh`). Adding a language means adding one object and one `<option>`.
 
 ## Limits
 
@@ -64,6 +67,8 @@ MIT
 
 把学校 Outlook 网页里的「给钱、给券」招募邮件抓出来，按 **时薪** 排成一张清单：金额 ÷ 耗时，高的在上。
 算不出时薪的（代金券、抽奖、只说“报酬丰厚”）单独分组，不冒充收入。
+
+界面中英双语，工具栏的「语言」可切换，选择会记住。
 
 **安装**：`chrome://extensions` → 开发者模式 → 加载已解压的扩展程序 → 选 `extension/` → 登录 Outlook 后打开
 `chrome-extension://<扩展ID>/board.html` → 点「重新抓取」。
