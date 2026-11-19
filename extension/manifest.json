@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "悬赏令 Demo",
-  "version": "0.3.0",
-  "description": "从 Outlook 网页里挑出给钱 / 给券的邮件，排成一张悬赏令。",
+  "name": "Bounty Board",
+  "version": "0.3.1",
+  "description": "Turns your Outlook inbox into a ranked list of paid research studies, sorted by hourly rate.",
   "permissions": [
     "storage",
     "tabs",
@@ -21,7 +21,7 @@
   },
   "action": {
     "default_popup": "popup.html",
-    "default_title": "悬赏令"
+    "default_title": "Bounty Board"
   },
   "content_scripts": [
     {

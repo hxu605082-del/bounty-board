@@ -21,7 +21,7 @@ const KIND_LABEL = { cash: '现金', voucher: '代金券', vague: '待确认', l
 const EXT_VERSION = (() => {
   try { return api.runtime.getManifest().version; } catch (e) { return '?'; }
 })();
-const BUILD_VERSION = '0.3.0';
+const BUILD_VERSION = '0.3.1';
 const CONTENT_VERSION = 13;
 
 const SECTIONS = [
